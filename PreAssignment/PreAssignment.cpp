@@ -64,8 +64,8 @@ int main()
 
                 std::random_device rd;
                 std::mt19937 gen(rd());
-                std::uniform_int_distribution<int> dist(1, vecInput.back().first);
-                key = dist(gen);
+                std::uniform_int_distribution<int> r(1, vecInput.back().first);
+                key = r(gen);
                 cout << "key: "<< key << "\n";
 
                 auto e = lower_bound(vecInput.begin(), vecInput.end(), key, [](pair<int, int> a, int b) {
