@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 
 using namespace std;
@@ -9,33 +10,41 @@ using namespace std;
 template <typename T>
 class random {
 public:
-	random() : m_seed(std::chrono::system_clock::now().time_since_epoch().count()) {};
+	random(){};
 	~random() = default;
 
 	void AddRandom(int Preb, const T& Data) {
 		if (m_vecData.empty()) {
-			m_vecData.push_back(Preb, Data);
+			m_vecData.push_back({ Preb, Data });
 		}
 		else {
-			m_vecData.push_back(m_vecData.back()->first+Preb, Data);
+			m_vecData.push_back({ m_vecData.back().first + Preb, Data });
 		}
 	}
 
 	bool GetRandom(T& Data) const {
-		std::uniform_int_distribution<int> r(1, m_vecData.back().first);
 
-		auto key = r(m_seed);
-		auto elem = lower_bound(m_vecData.begin(), m_vecData.end(), key, [](pair<int, int> a, int b) {
+		std::mt19937_64 gen(std::chrono::system_clock::now().time_since_epoch().count());
+		std::uniform_int_distribution<int> r(1, m_vecData.back().first);
+		int key = r(gen);
+		cout << "random value :" << key << "\n";
+		auto elem = lower_bound(m_vecData.begin(), m_vecData.end(), key, [](pair<int, const T&> a, int b) {
 			return a.first < b;
 			});
-		if (e != m_vecData.end()) {
-			Data = e.second;
+		if (elem != m_vecData.end()) {
+			Data = elem->second;
 			return true;
 		}
 		return false;
 	}
 
+	void Enum() {
+		for (auto& e : m_vecData) {
+			cout << "key:" << e.first << "(value:" << e.second << ") ";
+		}
+		cout << "\n";
+	}
+
 private:
-	mt19937_64	m_seed;
-	vector<int, T&> m_vecData;
+	vector<pair<int, const T&>> m_vecData;
 };
