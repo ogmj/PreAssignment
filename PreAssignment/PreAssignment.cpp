@@ -1,10 +1,8 @@
 ﻿#include <iostream>
-#include <vector>
-#include <string>
 #include <cassert>
+#include <memory>
+#include "Random.h"
 
-#include <random>
-#include <map>
 using namespace std;
 
 void spilt(vector<string>& command, string input) {
@@ -22,7 +20,8 @@ void spilt(vector<string>& command, string input) {
     command.push_back(elem);
 }
 
-
+static random<shared_ptr<int>> g_randomTest;
+static vector<shared_ptr<int>> vecValue;
 
 int main()
 {
@@ -37,13 +36,36 @@ int main()
             if (command[0] == "/quit") {
                 break;
             }
-            else if (command[0] == "/s") {
+            else if (command[0] == "/test1") {
+                assert(command.size() == 2);
+                assert(atoi(command[1].c_str()));
 
+                shared_ptr<int> value;
+                int cnt = atoi(command[1].c_str());
+                for (auto i = 0; i < cnt; ++i) {
+                    value = make_shared<int>(g_randomTest.GetRand(1,99));
+                    vecValue.push_back(value);
+                }
+                for (auto& elem : vecValue) {
+                    g_randomTest.AddRandom(*elem, elem);
+                }
+                shared_ptr<int> result;
+                g_randomTest.Enum();
+                g_randomTest.GetRandom(result);
+                cout << "result value: " << *result << "\nend\n";
+
+            }
+            else if (command[0] == "/retest1") {
+                assert(command.size() == 1);
+                shared_ptr<int> result;
+                g_randomTest.Enum();
+                g_randomTest.GetRandom(result);
+                cout << "result value: " << result << "\nend\n";
             }
             else if (command[0] == "/i") {
 
             }
-            else if (command[0] == "/pt1") {
+            else if (command[0] == "/prototype1") {
                 assert(command.size() > 1);
                 assert(atoi(command[1].c_str()));
                 vector<pair<int, int>> vecInput;
