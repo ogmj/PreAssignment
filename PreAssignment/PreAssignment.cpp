@@ -2,6 +2,7 @@
 #include <cassert>
 #include <memory>
 #include "Random.h"
+#include "Skill.h"
 
 using namespace std;
 
@@ -22,6 +23,9 @@ void spilt(vector<string>& command, string input) {
 
 static random<shared_ptr<int>> g_randomTest;
 static vector<shared_ptr<int>> vecValue;
+
+static random<shared_ptr<skill>> g_randomSkill;
+static vector<shared_ptr<skill>> vecSkill;
 
 int main()
 {
@@ -53,7 +57,6 @@ int main()
                 g_randomTest.Enum();
                 g_randomTest.GetRandom(result);
                 cout << "result value: " << *result << "\nend\n";
-
             }
             else if (command[0] == "/retest1") {
                 assert(command.size() == 1);
@@ -62,8 +65,42 @@ int main()
                 g_randomTest.GetRandom(result);
                 cout << "result value: " << result << "\nend\n";
             }
-            else if (command[0] == "/i") {
+            else if (command[0] == "/skilltest1") {
+                assert(command.size() == 2);
+                assert(atoi(command[1].c_str()));
 
+                g_randomSkill.Clear();
+                vecSkill.clear();
+
+                shared_ptr<skill> value;
+                int cnt = atoi(command[1].c_str());
+                for (auto i = 0; i < cnt; ++i) {
+                    value = make_shared<skill>(i+1/*스킬ID*/, "skill" + to_string(i + 1)/*스킬명*/, g_randomSkill.GetRand(1, 99)/*스킬발동계수*/);
+                    vecSkill.push_back(value);
+                }
+                for (auto& elem : vecSkill) {
+                    g_randomSkill.AddRandom(elem.get()->getPreb(), elem);
+                }
+
+                vector<pair<int, const shared_ptr<skill>&>> vecEnumSkill;
+                int total = 0;
+                shared_ptr<skill> result;
+                g_randomSkill.Enum(vecEnumSkill);
+                for(auto& e : vecEnumSkill) {
+                    total += e.second.get()->getPreb();
+                }
+                for(auto& e : vecEnumSkill) {
+                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬선택구간: " << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total )%100 << "%\n";
+                }
+                g_randomSkill.GetRandom(result);
+                cout << "발동스킬: " << result.get()->getName() << "\nend\n";
+            }
+            else if (command[0] == "/reskilltest1") {
+                assert(command.size() == 1);
+                shared_ptr<skill> result;
+                g_randomSkill.Enum();
+                g_randomSkill.GetRandom(result);
+                cout << "발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/prototype1") {
                 assert(command.size() > 1);

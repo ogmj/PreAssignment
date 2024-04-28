@@ -46,15 +46,25 @@ public:
 	T2 GetRand(T2 begin, T2 end) {
 		std::uniform_int_distribution<T2> r(begin, end);
 		T2 key = r(m_Seed);
-		cout << "random key :" << key << "\n";
+		cout << "렌덤값 :" << key << "\n";
 		return key;
 	}
 
 	void Enum() {
 		for (auto& e : m_vecData) {
-			cout << "key:" << e.first << "(value:" << *e.second << ") ";
+			cout << "발동확율:" << e.first/ m_vecData.size() << "(value:" << e.second << ") ";
 		}
 		cout << "\n";
+	}
+
+	void Enum(vector<pair<int, const T1&>>& vecData){
+		for (auto& e : m_vecData) {
+			vecData.push_back({ e.first, e.second });
+		}
+	}
+
+	void Clear() {
+		m_vecData.clear();
 	}
 
 private:
