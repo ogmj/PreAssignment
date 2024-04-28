@@ -97,8 +97,16 @@ int main()
             }
             else if (command[0] == "/reskilltest1") {
                 assert(command.size() == 1);
+                vector<pair<int, const shared_ptr<skill>&>> vecEnumSkill;
+                int total = 0;
                 shared_ptr<skill> result;
-                g_randomSkill.Enum();
+                g_randomSkill.Enum(vecEnumSkill);
+                for (auto& e : vecEnumSkill) {
+                    total += e.second.get()->getPreb();
+                }
+                for (auto& e : vecEnumSkill) {
+                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬선택구간: " << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
+                }
                 g_randomSkill.GetRandom(result);
                 cout << "발동스킬: " << result.get()->getName() << "\nend\n";
             }
