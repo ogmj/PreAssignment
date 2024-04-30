@@ -9,8 +9,7 @@ public:
 	skill(int id, const char * name, int preb) : mID(id), mName(name), mPreb(preb) {};
 	~skill() = default;
 
-	int getPreb()
-	{
+	int getPreb(){
 		return mPreb;
 	}
 
