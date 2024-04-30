@@ -26,10 +26,10 @@
     <ClInclude Include="Skill.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="ItemInfo.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Drop.h">
+    <ClInclude Include="DropInfo.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

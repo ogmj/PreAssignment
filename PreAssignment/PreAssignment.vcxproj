@@ -143,8 +143,8 @@
     <ClCompile Include="PreAssignment.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Drop.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="DropInfo.h" />
+    <ClInclude Include="ItemInfo.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Skill.h" />
   </ItemGroup>

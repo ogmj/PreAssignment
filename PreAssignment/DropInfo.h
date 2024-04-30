@@ -1,19 +1,19 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
-#include "Item.h"
+#include "ItemInfo.h"
 
 using namespace std;
 
 extern random<shared_ptr<int>> g_randomTest;
 
 template<typename T1, typename T2, typename T3, typename T4>
-class droplist {
+class DropInfo {
 public:
-	droplist() {};
-	~droplist() = default;
+	DropInfo() {};
+	~DropInfo() = default;
 
-	void addItem(T1 id, T2 classID, T3 preb, T4* Data ) {
+	void AddDropItem(T1 id, T2 classID, T3 preb, T4* Data ) {
 		auto dropList = mHsDropList.find(id);
 		if (dropList != mHsDropList.end()) {
 			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4*>>> a, int b) {
@@ -47,7 +47,7 @@ public:
 		}
 	}
 
-	bool dropItem(T1 id, T2 classID, T4*& Data) {
+	bool GetRandomItem(T1 id, T2 classID, T4*& Data) {
 		auto dropList = mHsDropList.find(id);
 		if (dropList != mHsDropList.end()) {
 			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4*>>> a, int b) {
@@ -62,7 +62,7 @@ public:
 						});
 					cout << "아이템 리스트\n";
 					for (auto& item : (*classType).second) {
-						cout << "아이템명: " << item.second->getName() << ", 드롭난수구간: " << item.first << ", 클래스: " << item.second->getClassType() << "\n";
+						cout << "아이템명: " << item.second->GetName() << ", 드롭난수구간: " << item.first << ", 클래스: " << item.second->GetClassType() << "\n";
 					}
 					Data = (*itemIt).second;
 					return true;

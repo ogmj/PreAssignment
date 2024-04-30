@@ -3,7 +3,7 @@
 #include <memory>
 #include "Random.h"
 #include "Skill.h"
-#include "Drop.h"
+#include "DropInfo.h"
 
 using namespace std;
 
@@ -28,8 +28,8 @@ static vector<shared_ptr<int>> vecValue;
 static random<shared_ptr<skill>> g_randomSkill;
 static vector<shared_ptr<skill>> vecSkill;
 
-static droplist<int, char, int, item> gDropList;
-static vector<item*> gVecItem;
+static DropInfo<int, char, int, ItemInfo> gDropList;
+static vector<ItemInfo*> gVecItem;
 
 int main()
 {
@@ -165,9 +165,9 @@ int main()
                 auto itemtype = static_cast<char>(atoi(command[4].c_str()));
                 //드롭 리스트에 아이템 등록
                 for (auto i = 0; i < cnt; ++i) {
-                    item* pItem = new item(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
-                    gVecItem.push_back(pItem);
-                    gDropList.addItem(dropID, classType, g_randomTest.GetRand(1, 99), pItem);
+                    ItemInfo* pItemInfo = new ItemInfo(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
+                    gVecItem.push_back(pItemInfo);
+                    gDropList.AddDropItem(dropID, classType, g_randomTest.GetRand(1, 99), pItemInfo);
                 }
                 cout << "end\n";
             }
@@ -184,10 +184,10 @@ int main()
                 assert(atoi(command[2].c_str()));
                 auto dropID = atoi(command[1].c_str());
                 auto classType = static_cast<char>(atoi(command[2].c_str()));
-                item* pItem = nullptr;
-                if (gDropList.dropItem(dropID, classType, pItem)) {
-                    if (pItem) {
-                        cout << "드롭아이템명: " << pItem->getName() << "\n";
+                ItemInfo* pItemInfo = nullptr;
+                if (gDropList.GetRandomItem(dropID, classType, pItemInfo)) {
+                    if (pItemInfo) {
+                        cout << "드롭아이템명: " << pItemInfo->GetName() << "\n";
                     }
                 }
                 else {
