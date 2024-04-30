@@ -13,10 +13,10 @@ public:
 	droplist() {};
 	~droplist() = default;
 
-	void addItem(T1 id, T2 classID, T3 preb, T4& Data ) {
+	void addItem(T1 id, T2 classID, T3 preb, T4* Data ) {
 		auto dropList = mHsDropList.find(id);
 		if (dropList != mHsDropList.end()) {
-			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4&>>> a, int b) {
+			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4*>>> a, int b) {
 				return a.first < b;
 				});
 			if (classType != dropList->second.end()) {
@@ -25,46 +25,48 @@ public:
 					(*classType).second.push_back({ preb + key, Data });
 				}
 				else {
-					vector<pair<T3, T4&>> vec;
+					vector<pair<T3, T4*>> vec;
 					vec.push_back({ preb, Data });
 					dropList->second.push_back({ classID, vec });
 				}
 			}
 			else {
-				vector<pair<T3, T4&>> vec;
+				vector<pair<T3, T4*>> vec;
 				vec.push_back({ preb, Data });
 				dropList->second.push_back({ classID, vec });
 			}
 		}
 		else {
-			vector<pair<T3, T4&>> vec;
+			vector<pair<T3, T4*>> vec;
 			vec.push_back({ preb, Data });
 
-			vector<pair<T2, vector<pair<T3, T4&>>>> vec1;
+			vector<pair<T2, vector<pair<T3, T4*>>>> vec1;
 			vec1.push_back({classID, vec });
 
 			mHsDropList.insert({ id, vec1 });
 		}
 	}
 
-	bool dropItem(T1 id, T2 classID, T4& Data) {
+	bool dropItem(T1 id, T2 classID, T4*& Data) {
 		auto dropList = mHsDropList.find(id);
 		if (dropList != mHsDropList.end()) {
-			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4&>>> a, int b) {
+			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4*>>> a, int b) {
 				return a.first < b;
 				});
-			if (classID == (*classType).first) {
-				int dropRand = g_randomTest.GetRand(1, (*classType).second.back().first);
-				cout << "드롭난수: " << dropRand << "\n";
-				auto itemIt = lower_bound((*classType).second.begin(), (*classType).second.end(), dropRand, [](pair<T3, T4&> a, T3 b) {
-				return a.first < b;
-				});
-				cout << "아이템 리스트\n";
-				for (auto& item: (*classType).second) {
-					cout << "아이템명: " << item.second.getName() << ", 드롭난수구간: " << item.first << ", 클래스: " << item.second.getClassType() << "\n";
+			if (classType != dropList->second.end()) {
+				if (classID == (*classType).first) {
+					int dropRand = g_randomTest.GetRand(1, (*classType).second.back().first);
+					cout << "드롭난수: " << dropRand << "\n";
+					auto itemIt = lower_bound((*classType).second.begin(), (*classType).second.end(), dropRand, [](pair<T3, T4*> a, T3 b) {
+						return a.first < b;
+						});
+					cout << "아이템 리스트\n";
+					for (auto& item : (*classType).second) {
+						cout << "아이템명: " << item.second->getName() << ", 드롭난수구간: " << item.first << ", 클래스: " << item.second->getClassType() << "\n";
+					}
+					Data = (*itemIt).second;
+					return true;
 				}
-				Data = (*itemIt).second;
-				return true;
 			}
 		}
 		return false;
@@ -72,5 +74,5 @@ public:
 
 private:
 	//unordered_map<드롭ID, vector<pair<클래스Type, vector<드롭난수구간,드롭Item >>> > mHsDropList
-	unordered_map<T1, vector<pair<T2, vector<pair<T3, T4&>>>>> mHsDropList;
+	unordered_map<T1, vector<pair<T2, vector<pair<T3, T4*>>>>> mHsDropList;
 };

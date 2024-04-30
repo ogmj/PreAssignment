@@ -167,7 +167,7 @@ int main()
                 for (auto i = 0; i < cnt; ++i) {
                     item* pItem = new item(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
                     gVecItem.push_back(pItem);
-                    gDropList.addItem(dropID, classType, g_randomTest.GetRand(1, 99), *pItem);
+                    gDropList.addItem(dropID, classType, g_randomTest.GetRand(1, 99), pItem);
                 }
                 cout << "end\n";
             }
@@ -184,9 +184,11 @@ int main()
                 assert(atoi(command[2].c_str()));
                 auto dropID = atoi(command[1].c_str());
                 auto classType = static_cast<char>(atoi(command[2].c_str()));
-                item Item;
-                if (gDropList.dropItem(dropID, classType, Item)) {
-                    cout << "드롭아이템명: " << Item.getName() << "\n";
+                item* pItem = nullptr;
+                if (gDropList.dropItem(dropID, classType, pItem)) {
+                    if (pItem) {
+                        cout << "드롭아이템명: " << pItem->getName() << "\n";
+                    }
                 }
                 else {
                     cout << "드롭ID 혹은 직업타입으로 드롭아이템을 찾지 못하였습니다.\n";
