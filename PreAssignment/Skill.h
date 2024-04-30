@@ -6,7 +6,7 @@ using namespace std;
 class skill {
 public:
 	skill() : mID(0), mName("skill"), mPreb(0) {};
-	skill(int id, string name, int preb) : mID(id), mName(name), mPreb(preb) {};
+	skill(int id, const char * name, int preb) : mID(id), mName(name), mPreb(preb) {};
 	~skill() = default;
 
 	int getPreb()
