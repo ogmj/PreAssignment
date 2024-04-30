@@ -185,8 +185,12 @@ int main()
                 auto dropID = atoi(command[1].c_str());
                 auto classType = static_cast<char>(atoi(command[2].c_str()));
                 item Item;
-                gDropList.dropItem(dropID, classType, Item);
-
+                if (gDropList.dropItem(dropID, classType, Item)) {
+                    cout << "드롭아이템명: " << Item.getName() << "\n";
+                }
+                else {
+                    cout << "드롭ID 혹은 직업타입으로 드롭아이템을 찾지 못하였습니다.\n";
+                }
             }
         }
     }
