@@ -3,6 +3,7 @@
 #include <memory>
 #include "Random.h"
 #include "Skill.h"
+#include "Drop.h"
 
 using namespace std;
 
@@ -75,7 +76,7 @@ int main()
                 shared_ptr<skill> value;
                 int cnt = atoi(command[1].c_str());
                 for (auto i = 0; i < cnt; ++i) {
-                    value = make_shared<skill>(i+1/*스킬ID*/, "skill" + to_string(i + 1)/*스킬명*/, g_randomSkill.GetRand(1, 99)/*스킬발동계수*/);
+                    value = make_shared<skill>(i+1/*스킬ID*/, ("skill" + to_string(i + 1)).c_str()/*스킬명*/, g_randomSkill.GetRand(1, 99)/*스킬발동계수*/);
                     vecSkill.push_back(value);
                 }
                 for (auto& elem : vecSkill) {
@@ -146,6 +147,30 @@ int main()
                 }
 
                 cout << "end\n";
+            }
+            else if (command[0] == "/prototype2") {
+                static droplist<int, char, int, item&> gDropList;
+                static vector<item*> gVecItem;
+
+                assert(command.size() == 5);
+                assert(atoi(command[1].c_str()));
+                assert(atoi(command[2].c_str()));
+                assert(atoi(command[3].c_str()));
+                assert(atoi(command[4].c_str()));
+
+                auto cnt = atoi(command[1].c_str());
+                auto dropID = atoi(command[2].c_str());
+                auto classType = static_cast<char>(atoi(command[3].c_str()));
+                auto itemtype = static_cast<char>(atoi(command[4].c_str()));
+                for (auto i = 0; i < cnt; ++i) {
+                    item* pItem = new item(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
+                    gVecItem.push_back(pItem);
+                    gDropList.addItem(dropID, classType, g_randomTest.GetRand(1, 99), *pItem);
+                }
+                cout << "end\n";
+                //아이템
+                //드롭 리스트
+                //드롭 리스트에 아이템 등록
             }
         }
     }
