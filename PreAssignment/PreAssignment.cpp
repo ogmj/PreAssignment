@@ -28,6 +28,9 @@ static vector<shared_ptr<int>> vecValue;
 static random<shared_ptr<skill>> g_randomSkill;
 static vector<shared_ptr<skill>> vecSkill;
 
+static droplist<int, char, int, item> gDropList;
+static vector<item*> gVecItem;
+
 int main()
 {
     char input[512];
@@ -148,9 +151,7 @@ int main()
 
                 cout << "end\n";
             }
-            else if (command[0] == "/prototype2") {
-                static droplist<int, char, int, item&> gDropList;
-                static vector<item*> gVecItem;
+            else if (command[0] == "/test2loaditem") {
 
                 assert(command.size() == 5);
                 assert(atoi(command[1].c_str()));
@@ -162,15 +163,30 @@ int main()
                 auto dropID = atoi(command[2].c_str());
                 auto classType = static_cast<char>(atoi(command[3].c_str()));
                 auto itemtype = static_cast<char>(atoi(command[4].c_str()));
+                //드롭 리스트에 아이템 등록
                 for (auto i = 0; i < cnt; ++i) {
                     item* pItem = new item(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
                     gVecItem.push_back(pItem);
                     gDropList.addItem(dropID, classType, g_randomTest.GetRand(1, 99), *pItem);
                 }
                 cout << "end\n";
-                //아이템
-                //드롭 리스트
-                //드롭 리스트에 아이템 등록
+            }
+            else if (command[0] == "/test2inititem") {
+                for (auto& item: gVecItem) {
+                    delete item;
+                }
+                gVecItem.clear();
+                cout << "end\n";
+            }
+            else if (command[0] == "/test2dropitem") {
+                assert(command.size() == 3);
+                assert(atoi(command[1].c_str()));
+                assert(atoi(command[2].c_str()));
+                auto dropID = atoi(command[1].c_str());
+                auto classType = static_cast<char>(atoi(command[2].c_str()));
+                item Item;
+                gDropList.dropItem(dropID, classType, Item);
+
             }
         }
     }

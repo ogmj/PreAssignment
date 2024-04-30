@@ -46,7 +46,6 @@ public:
 	T2 GetRand(T2 begin, T2 end) {
 		std::uniform_int_distribution<T2> r(begin, end);
 		T2 key = r(m_Seed);
-		cout << "렌덤값 :" << key << "\n";
 		return key;
 	}
 
