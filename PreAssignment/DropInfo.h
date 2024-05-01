@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include "ItemInfo.h"
+#include "../PreAssignment/Util/CMutex.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ public:
 	~DropInfo() = default;
 
 	void AddDropItem(T1 id, T2 classID, T3 preb, T4* Data ) {
+		CLOCK(mLock);
 		auto dropList = mHsDropList.find(id);
 		if (dropList != mHsDropList.end()) {
 			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4*>>> a, int b) {
@@ -48,6 +50,7 @@ public:
 	}
 
 	bool GetRandomItem(T1 id, T2 classID, T4*& Data) {
+		CLOCK(mLock);
 		auto dropList = mHsDropList.find(id);
 		if (dropList != mHsDropList.end()) {
 			auto classType = lower_bound(dropList->second.begin(), dropList->second.end(), classID, [](pair<T2, vector<pair<T3, T4*>>> a, int b) {
@@ -75,4 +78,5 @@ public:
 private:
 	//unordered_map<드롭ID, vector<pair<클래스Type, vector<드롭난수구간,드롭Item >>> > mHsDropList
 	unordered_map<T1, vector<pair<T2, vector<pair<T3, T4*>>>>> mHsDropList;
+	CMutex mLock;
 };
