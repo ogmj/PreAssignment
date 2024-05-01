@@ -143,9 +143,15 @@
     <ClCompile Include="PreAssignment.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CLock.h" />
+    <ClInclude Include="CMap.h" />
+    <ClInclude Include="CMapManager.h" />
+    <ClInclude Include="CMutex.h" />
     <ClInclude Include="DropInfo.h" />
     <ClInclude Include="ItemInfo.h" />
+    <ClInclude Include="CMemoryPool.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="CSingleton.h" />
     <ClInclude Include="Skill.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
