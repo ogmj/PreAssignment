@@ -9,17 +9,15 @@ class MemoryPool
 public:
 	static void* operator new(size_t allocLength)
 	{
-
 		//만약 더 이상 할당할 수 있는 공간이 없을 경우 새로 할당합니다.
 		if (!mFreePointer)
 		{
 			alloc_block(get_size(allocLength));
 		}
-		unsigned char* returnPointer = mFreePointer;
-		mFreePointer = *reinterpret_cast<unsigned char**>(returnPointer);
+		unsigned char* ReturnPointer = mFreePointer;
+		mFreePointer = *reinterpret_cast<unsigned char**>(ReturnPointer);
 
-
- 		return returnPointer;
+		return ReturnPointer;
 	}
 
 	static void operator delete(void* deletePointer)
