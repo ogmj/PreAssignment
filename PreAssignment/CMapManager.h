@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <atomic>
 #include "CMap.h"
-#include "../PreAssignment/Util/CMutex.h"
+#include "Util/CMutex.h"
 using namespace std;
 
 class CMapManager {
@@ -17,14 +17,27 @@ public:
 
 	void AddChannelMap(char type, CMap* pMap) {
 		CLOCK(mLock);
-		if (type == 0) {
-			mVecBaseMapChannelList.push_back({GetMapID(), pMap});
-			mHsSelectMapChannelList.insert({ GetMapID(), pMap });
+		if (type == static_cast<char>(CMap::MapType::BASE)) {
+			mVecBaseMapChannelList.push_back({pMap->GetIndex(), pMap});
+			mHsSelectMapChannelList.insert({pMap->GetIndex(), pMap});
 		}
 		else {
-			mHsSubMapChannelList.insert({GetMapID(), pMap});
-			mHsSelectMapChannelList.insert({ GetMapID(), pMap });
+			mHsSubMapChannelList.insert({pMap->GetIndex(), pMap});
+			mHsSelectMapChannelList.insert({pMap->GetIndex(), pMap });
 		}
+	}
+
+	void ClearChannelMap() {
+		CLOCK(mLock);
+		for (auto& sub: mHsSubMapChannelList) {
+			delete sub.second;
+		}
+		mHsSubMapChannelList.clear();
+		for (auto& base : mVecBaseMapChannelList) {
+			delete base.second;
+		}
+		mVecBaseMapChannelList.clear();
+		mHsSelectMapChannelList.clear();
 	}
 
 	void DeleteChannelMap(int index) {
@@ -61,6 +74,7 @@ public:
 		if (selectMapIt != mHsSelectMapChannelList.end()) {
 			return (*selectMapIt).first;
 		}
+		return 0;
 	}
 
 	void AddPlayer(int index) {
@@ -68,9 +82,14 @@ public:
 		auto selectMapIt = mHsSelectMapChannelList.find(index);
 		if (selectMapIt != mHsSelectMapChannelList.end()) {
 			(*selectMapIt).second->AddPlayer();
-			if ((*selectMapIt).second->GetMaxPlayerCnt() >= (*selectMapIt).second->GetPlayerCnt()) {
+			if ((*selectMapIt).second->GetSuitablePlayerCnt() >= (*selectMapIt).second->GetPlayerCnt()) {
 				mHsSelectMapChannelList.erase(selectMapIt);
 			}
+		}
+		//만약 mHsSelectMapChannelList에 더이상 유효한 맵이 없다면 신규 맵채널 준비
+		if (mHsSelectMapChannelList.empty()) {
+			CMap * pMap = CMap::MakeMap(GetMapID(), static_cast<char>(CMap::MapType::SUB), static_cast<int>(CMap::PlayerCnt::Suitable));
+			AddChannelMap(static_cast<char>(CMap::MapType::SUB), pMap);
 		}
 	}
 
@@ -79,7 +98,7 @@ public:
 		auto subMapIt = mHsSubMapChannelList.find(index);
 		if (subMapIt != mHsSubMapChannelList.end()) {
 			(*subMapIt).second->RemovePlayer();
-			if ((*subMapIt).second->GetMaxPlayerCnt() * 0.8 >= (*subMapIt).second->GetPlayerCnt()) {
+			if ((*subMapIt).second->GetSuitablePlayerCnt() * 0.7 >= (*subMapIt).second->GetPlayerCnt()) {
 				mHsSelectMapChannelList.insert({index,(*subMapIt).second});
 			}
 		}
@@ -89,7 +108,7 @@ public:
 				});
 			if (baseMapIt != mVecBaseMapChannelList.end()) {
 				(*baseMapIt).second->RemovePlayer();
-				if ((*baseMapIt).second->GetMaxPlayerCnt() * 0.8 >= (*baseMapIt).second->GetPlayerCnt()) {
+				if ((*baseMapIt).second->GetSuitablePlayerCnt() * 0.7 >= (*baseMapIt).second->GetPlayerCnt()) {
 					mHsSelectMapChannelList.insert({index,(*baseMapIt).second});
 				}
 			}
