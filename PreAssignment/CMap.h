@@ -4,12 +4,20 @@
 class CMap: public MemoryPool<CMap> {
 public:
 	CMap() = delete;
-	explicit CMap( int id, char type, int max ): mIndex(id), mType(type), mMaxPlayerCnt(max), mPlayerCnt(0) {};
+	explicit CMap( int id, char type, int suitable ): mIndex(id), mType(type), mSuitablePlayerCnt(suitable), mPlayerCnt(0) {};
 	virtual ~CMap() = default;
 
-	CMap* MakeMap(int id, char type, int max) {
-		return new CMap(id, type, max);
+	static CMap* MakeMap(int id, char type, int suitable) {
+		return new CMap(id, type, suitable);
 	}
+
+	enum class MapType : char {
+		BASE = 1,	//불변 맵타입으로 플레이어 수가 0이 되더라도 제거되지 않는다.
+		SUB = 2		//가변 맵타입으로 플레이어 수에 따라 제거된다. 
+	};
+	enum class PlayerCnt : int {
+		Suitable = 10,	//맵에서 플레이 가능한 적정인원수. 적정 플레이어수의 120%정도까지는 성능상 커버가 되어야 합니다.
+	};
 
 	void AddPlayer() {
 		++mPlayerCnt;
@@ -17,8 +25,8 @@ public:
 	void RemovePlayer(){
 		--mPlayerCnt;
 	}
-	int GetMaxPlayerCnt() {
-		return mMaxPlayerCnt;
+	int GetSuitablePlayerCnt() {
+		return mSuitablePlayerCnt;
 	}
 	int GetPlayerCnt() {
 		return mPlayerCnt;
@@ -31,8 +39,8 @@ public:
 	}
 
 private:
-	int mIndex;			//유니크 아이디
-	int mPlayerCnt;
-	int mMaxPlayerCnt;
-	char mType;			//0:기본 1;추가
+	int mIndex;				//유니크 아이디
+	int mPlayerCnt;			//현재 플레이어 수
+	int mSuitablePlayerCnt;	//적정 플레이어수
+	char mType;				//0:기본 1;추가
 };
