@@ -4,6 +4,9 @@
 #include "Random.h"
 #include "Skill.h"
 #include "DropInfo.h"
+//#include "CMap.h"
+#include "CMapManager.h"
+#include "Util/CSingleton.h"
 
 using namespace std;
 
@@ -30,6 +33,8 @@ static vector<shared_ptr<skill>> vecSkill;
 
 static DropInfo<int, char, int, ItemInfo> gDropList;
 static vector<ItemInfo*> gVecItem;
+
+static CMapManager* gMapManager = CSingleton< CMapManager >::GetInstance();
 
 int main()
 {
@@ -193,6 +198,26 @@ int main()
                 else {
                     cout << "드롭ID 혹은 직업타입으로 드롭아이템을 찾지 못하였습니다.\n";
                 }
+            }
+            else if (command[0] == "/test3addmap") {
+                assert(command.size() == 3 && "/test3addmap command size error");
+                assert(atoi(command[1].c_str()) && "/test3addmap command[1] value error");
+                assert(atoi(command[2].c_str()) && "/test3addmap command[2] value error");
+
+                auto cnt = atoi(command[1].c_str());
+                auto type = static_cast<char>(atoi(command[2].c_str()));
+                assert(type >= 1 && type <= 2 && "/test3addmap command[2] range error");
+
+                for (auto i = 0; i < cnt; ++i) {
+                    CMap* pMap = CMap::MakeMap(CSingleton< CMapManager >::GetInstance()->GetMapID(),
+                        type, static_cast<char>(CMap::PlayerCnt::Suitable));
+                    CSingleton< CMapManager >::GetInstance()->AddChannelMap(type, pMap);
+                }
+
+                cout << "end\n";
+            }
+            else if (command[0] == "/test3clearmap") {
+                CSingleton< CMapManager >::GetInstance()->ClearChannelMap();
             }
         }
     }
