@@ -19,11 +19,11 @@ public:
 		CLOCK(mLock);
 		if (type == 0) {
 			mVecBaseMapChannelList.push_back({GetMapID(), pMap});
-			mVecSelectMapChannelList.push_back({ GetMapID(), pMap });
+			mHsSelectMapChannelList.insert({ GetMapID(), pMap });
 		}
 		else {
 			mHsSubMapChannelList.insert({GetMapID(), pMap});
-			mVecSelectMapChannelList.push_back({ GetMapID(), pMap });
+			mHsSelectMapChannelList.insert({ GetMapID(), pMap });
 		}
 	}
 
@@ -34,13 +34,10 @@ public:
 			delete (*subMapIt).second;
 			mHsSubMapChannelList.erase(subMapIt);
 
-			auto selectMapIt = lower_bound(mVecSelectMapChannelList.begin(), mVecSelectMapChannelList.end(), index, [](pair<int, CMap*> a, int b) {
-				return a.first < b;
-				});
-			if (selectMapIt != mVecSelectMapChannelList.end()) {
-				mVecSelectMapChannelList.erase(selectMapIt);
+			auto selectMapIt = mHsSelectMapChannelList.find(index);
+			if (selectMapIt != mHsSelectMapChannelList.end()) {
+				mHsSelectMapChannelList.erase(selectMapIt);
 			}
-
 		}
 		else {
 			auto baseMapIt = lower_bound(mVecBaseMapChannelList.begin(), mVecBaseMapChannelList.end(), index, [](pair<int,CMap*> a, int b) {
@@ -50,34 +47,29 @@ public:
 				delete (*baseMapIt).second;
 				mVecBaseMapChannelList.erase(baseMapIt);
 
-				auto selectMapIt = lower_bound(mVecSelectMapChannelList.begin(), mVecSelectMapChannelList.end(), index, [](pair<int, CMap*> a, int b) {
-					return a.first < b;
-					});
-				if (selectMapIt != mVecSelectMapChannelList.end()) {
-					mVecSelectMapChannelList.erase(selectMapIt);
+				auto selectMapIt = mHsSelectMapChannelList.find(index);
+				if (selectMapIt != mHsSelectMapChannelList.end()) {
+					mHsSelectMapChannelList.erase(selectMapIt);
 				}
-
 			}
 		}
 	}
 
 	int SelectChannelMap() {
 		CLOCK(mLock);
-		auto selectMapIt = mVecSelectMapChannelList.begin();
-		if (selectMapIt != mVecSelectMapChannelList.end()) {
+		auto selectMapIt = mHsSelectMapChannelList.begin();
+		if (selectMapIt != mHsSelectMapChannelList.end()) {
 			return (*selectMapIt).first;
 		}
 	}
 
 	void AddPlayer(int index) {
 		CLOCK(mLock);
-		auto selectMapIt = lower_bound(mVecSelectMapChannelList.begin(), mVecSelectMapChannelList.end(), index, [](pair<int, CMap*> a, int b) {
-			return a.first < b;
-			});
-		if (selectMapIt != mVecSelectMapChannelList.end()) {
+		auto selectMapIt = mHsSelectMapChannelList.find(index);
+		if (selectMapIt != mHsSelectMapChannelList.end()) {
 			(*selectMapIt).second->AddPlayer();
 			if ((*selectMapIt).second->GetMaxPlayerCnt() >= (*selectMapIt).second->GetPlayerCnt()) {
-				mVecSelectMapChannelList.erase(selectMapIt);
+				mHsSelectMapChannelList.erase(selectMapIt);
 			}
 		}
 	}
@@ -88,7 +80,7 @@ public:
 		if (subMapIt != mHsSubMapChannelList.end()) {
 			(*subMapIt).second->RemovePlayer();
 			if ((*subMapIt).second->GetMaxPlayerCnt() * 0.8 >= (*subMapIt).second->GetPlayerCnt()) {
-				mVecSelectMapChannelList.push_back({index,(*subMapIt).second});
+				mHsSelectMapChannelList.insert({index,(*subMapIt).second});
 			}
 		}
 		else {
@@ -98,7 +90,7 @@ public:
 			if (baseMapIt != mVecBaseMapChannelList.end()) {
 				(*baseMapIt).second->RemovePlayer();
 				if ((*baseMapIt).second->GetMaxPlayerCnt() * 0.8 >= (*baseMapIt).second->GetPlayerCnt()) {
-					mVecSelectMapChannelList.push_back({index,(*baseMapIt).second});
+					mHsSelectMapChannelList.insert({index,(*baseMapIt).second});
 				}
 			}
 		}
@@ -109,5 +101,5 @@ private:
 	atomic<int> mMapID;
 	vector<pair<int, CMap*>> mVecBaseMapChannelList;
 	unordered_map<int, CMap*> mHsSubMapChannelList;
-	vector<pair<int, CMap*>> mVecSelectMapChannelList;
+	unordered_map<int, CMap*> mHsSelectMapChannelList;
 };
