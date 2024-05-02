@@ -218,6 +218,19 @@ int main()
             }
             else if (command[0] == "/test3clearmap") {
                 CSingleton< CMapManager >::GetInstance()->ClearChannelMap();
+                cout << "end\n";
+            }
+            else if (command[0] == "/test3addplayer") {
+                auto index = CSingleton< CMapManager >::GetInstance()->SelectChannelMap();
+                CSingleton< CMapManager >::GetInstance()->AddPlayer(index);
+                cout << "end\n";
+            }
+            else if (command[0] == "/test3removeplayer") {
+                assert(command.size() == 2 && "/test3removeplayer command size error");
+                assert(atoi(command[1].c_str()) && "/test3removeplayer command[1] value error");
+                auto index = atoi(command[1].c_str());
+                CSingleton< CMapManager >::GetInstance()->RemovePlayer(index);
+                cout << "end\n";
             }
         }
     }
