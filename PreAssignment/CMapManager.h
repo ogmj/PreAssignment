@@ -82,7 +82,7 @@ public:
 		auto selectMapIt = mHsSelectMapChannelList.find(index);
 		if (selectMapIt != mHsSelectMapChannelList.end()) {
 			(*selectMapIt).second->AddPlayer();
-			if ((*selectMapIt).second->GetSuitablePlayerCnt() >= (*selectMapIt).second->GetPlayerCnt()) {
+			if ((*selectMapIt).second->GetSuitablePlayerCnt() <= (*selectMapIt).second->GetPlayerCnt()) {
 				mHsSelectMapChannelList.erase(selectMapIt);
 			}
 		}
@@ -99,7 +99,10 @@ public:
 		if (subMapIt != mHsSubMapChannelList.end()) {
 			(*subMapIt).second->RemovePlayer();
 			if ((*subMapIt).second->GetSuitablePlayerCnt() * 0.7 >= (*subMapIt).second->GetPlayerCnt()) {
-				mHsSelectMapChannelList.insert({index,(*subMapIt).second});
+				auto selectMapIt = mHsSelectMapChannelList.find(index);
+				if (selectMapIt == mHsSelectMapChannelList.end()) {
+					mHsSelectMapChannelList.insert({ index,(*subMapIt).second });
+				}
 			}
 		}
 		else {
@@ -109,7 +112,10 @@ public:
 			if (baseMapIt != mVecBaseMapChannelList.end()) {
 				(*baseMapIt).second->RemovePlayer();
 				if ((*baseMapIt).second->GetSuitablePlayerCnt() * 0.7 >= (*baseMapIt).second->GetPlayerCnt()) {
-					mHsSelectMapChannelList.insert({index,(*baseMapIt).second});
+					auto selectMapIt = mHsSelectMapChannelList.find(index);
+					if (selectMapIt == mHsSelectMapChannelList.end()) {
+						mHsSelectMapChannelList.insert({ index,(*baseMapIt).second });
+					}
 				}
 			}
 		}
