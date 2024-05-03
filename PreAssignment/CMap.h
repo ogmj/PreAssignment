@@ -42,5 +42,5 @@ private:
 	int mIndex;				//유니크 아이디
 	int mPlayerCnt;			//현재 플레이어 수
 	int mSuitablePlayerCnt;	//적정 플레이어수
-	char mType;				//0:기본 1;추가
+	char mType;				//1:불변맵타입 2;가변맵타입
 };
