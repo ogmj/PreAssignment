@@ -221,15 +221,24 @@ int main()
                 cout << "end\n";
             }
             else if (command[0] == "/test3addplayer") {
-                auto index = CSingleton< CMapManager >::GetInstance()->SelectChannelMap();
-                CSingleton< CMapManager >::GetInstance()->AddPlayer(index);
+                assert(command.size() == 2 && "/test3addplayer command size error");
+                assert(atoi(command[1].c_str()) && "/test3addplayer command[1] value error");
+                auto cnt = atoi(command[1].c_str());
+                for (auto i = 0; i < cnt; ++i) {
+                    auto index = CSingleton< CMapManager >::GetInstance()->SelectChannelMap();
+                    CSingleton< CMapManager >::GetInstance()->AddPlayer(index);
+                }
                 cout << "end\n";
             }
             else if (command[0] == "/test3removeplayer") {
-                assert(command.size() == 2 && "/test3removeplayer command size error");
+                assert(command.size() == 3 && "/test3removeplayer command size error");
                 assert(atoi(command[1].c_str()) && "/test3removeplayer command[1] value error");
+                assert(atoi(command[2].c_str()) && "/test3removeplayer command[2] value error");
                 auto index = atoi(command[1].c_str());
-                CSingleton< CMapManager >::GetInstance()->RemovePlayer(index);
+                auto cnt = atoi(command[2].c_str());
+                for (auto i = 0; i < cnt; ++i) {
+                    CSingleton< CMapManager >::GetInstance()->RemovePlayer(index);
+                }
                 cout << "end\n";
             }
         }
