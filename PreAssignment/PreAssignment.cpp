@@ -213,11 +213,12 @@ int main()
                         type, static_cast<char>(CMap::PlayerCnt::Suitable));
                     CSingleton< CMapManager >::GetInstance()->AddChannelMap(type, pMap);
                 }
-
+                CSingleton< CMapManager >::GetInstance()->EnumMapState();
                 cout << "end\n";
             }
             else if (command[0] == "/test3clearmap") {
                 CSingleton< CMapManager >::GetInstance()->ClearChannelMap();
+                CSingleton< CMapManager >::GetInstance()->EnumMapState();
                 cout << "end\n";
             }
             else if (command[0] == "/test3addplayer") {
@@ -228,6 +229,7 @@ int main()
                     auto index = CSingleton< CMapManager >::GetInstance()->SelectChannelMap();
                     CSingleton< CMapManager >::GetInstance()->AddPlayer(index);
                 }
+                CSingleton< CMapManager >::GetInstance()->EnumMapState();
                 cout << "end\n";
             }
             else if (command[0] == "/test3removeplayer") {
@@ -239,6 +241,7 @@ int main()
                 for (auto i = 0; i < cnt; ++i) {
                     CSingleton< CMapManager >::GetInstance()->RemovePlayer(index);
                 }
+                CSingleton< CMapManager >::GetInstance()->EnumMapState();
                 cout << "end\n";
             }
         }

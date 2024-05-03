@@ -121,6 +121,24 @@ public:
 		}
 	}
 
+	void EnumMapState() {
+		cout << "선택 가능 채널\n";
+		for (auto& selectMap : mHsSelectMapChannelList) {
+			cout << "index: " << selectMap.second->GetIndex() << ", PlayerCnt: " << selectMap.second->GetPlayerCnt() << "(" << selectMap.second->GetSuitablePlayerCnt() << ")\n";
+		}
+		cout << "선택 불가능 채널\n";
+		for (auto& map : mVecBaseMapChannelList) {
+			if (map.second->GetPlayerCnt() >= 10) {
+				cout << "index: " << map.second->GetIndex() << ", PlayerCnt: " << map.second->GetPlayerCnt() << "(" << map.second->GetSuitablePlayerCnt() << ")\n";
+			}
+		}
+		for (auto& map : mHsSubMapChannelList) {
+			if (map.second->GetPlayerCnt() >= 10) {
+				cout << "index: " << map.second->GetIndex() << ", PlayerCnt: " << map.second->GetPlayerCnt() << "(" << map.second->GetSuitablePlayerCnt() << ")\n";
+			}
+		}
+	}
+
 private:
 	CMutex mLock;
 	atomic<int> mMapID;
