@@ -30,6 +30,7 @@ public:
 	//bool GetRandom(T1& Data) const {
 	bool GetRandom(T1& Data) {
 		auto key = GetRand<int>(1, mVecData.back().first);
+		cout << "얻은난수: " << key;
 		auto elem = lower_bound(mVecData.begin(), mVecData.end(), key, [](pair<int, const T1&> a, int b) {
 			return a.first < b;
 			});
@@ -45,13 +46,6 @@ public:
 		std::uniform_int_distribution<T2> r(begin, end);
 		T2 randValue = r(mSeed);
 		return randValue;
-	}
-
-	void Enum() {
-		for (auto& e : mVecData) {
-			cout << "발동확율:" << e.first/ mVecData.size() << "(value:" << e.second << ") ";
-		}
-		cout << "\n";
 	}
 
 	void Enum(vector<pair<int, const T1&>>& vecData){

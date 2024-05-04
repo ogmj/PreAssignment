@@ -25,10 +25,10 @@ void spilt(vector<string>& command, string input) {
     command.push_back(elem);
 }
 
-static random<shared_ptr<int>> g_randomTest;
-static vector<shared_ptr<int>> vecValue;
+static random<shared_ptr<int>> gRandomTest;
+static vector<shared_ptr<int>> gVecValue;
 
-static random<shared_ptr<skill>> g_randomSkill;
+static random<shared_ptr<skill>> gRandomSkill;
 static vector<shared_ptr<skill>> vecSkill;
 
 static DropInfo<int, char, int, ItemInfo> gDropList;
@@ -50,58 +50,79 @@ int main()
                 break;
             }
             else if (command[0] == "/test1") {
-                assert(command.size() == 2);
-                assert(atoi(command[1].c_str()));
+                assert(command.size() == 2 && "/test1 command size error");
+                assert(atoi(command[1].c_str()) && "/test1 command value error");
 
                 shared_ptr<int> value;
                 int cnt = atoi(command[1].c_str());
                 for (auto i = 0; i < cnt; ++i) {
-                    value = make_shared<int>(g_randomTest.GetRand(1,99));
-                    vecValue.push_back(value);
+                    value = make_shared<int>(gRandomTest.GetRand(1,99));
+                    gVecValue.push_back(value);
                 }
-                for (auto& elem : vecValue) {
-                    g_randomTest.AddRandom(*elem, elem);
+                for (auto& elem : gVecValue) {
+                    gRandomTest.AddRandom(*elem, elem);
                 }
                 shared_ptr<int> result;
-                g_randomTest.Enum();
-                g_randomTest.GetRandom(result);
-                cout << "result value: " << *result << "\nend\n";
+                vector<pair<int, const shared_ptr<int>&>> vecEnum;
+                gRandomTest.Enum(vecEnum);
+                int total = 0;
+                for (auto e : vecEnum) {
+                    total += *e.second.get();
+                }
+                int f = 1;
+                for (auto it = vecEnum.begin(); it != vecEnum.end(); ++it) {
+                    cout << "난수구간: " << f << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
+                    f = (*it).first;
+                }
+                gRandomTest.GetRandom(result);
+                cout << ", 값: " << *result << "\nend\n";
             }
             else if (command[0] == "/retest1") {
                 assert(command.size() == 1);
                 shared_ptr<int> result;
-                g_randomTest.Enum();
-                g_randomTest.GetRandom(result);
-                cout << "result value: " << result << "\nend\n";
+                vector<pair<int, const shared_ptr<int>&>> vecEnum;
+                gRandomTest.Enum(vecEnum);
+                assert(vecEnum.empty() == false && "/retest1 enum empty.");
+                int total = 0;
+                for (auto e : vecEnum) {
+                    total += *e.second.get();
+                }
+                int f = 1;
+                for (auto it = vecEnum.begin(); it != vecEnum.end(); ++it) {
+                    cout << "난수구간: " << f << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
+                    f = (*it).first;
+                }
+                gRandomTest.GetRandom(result);
+                cout << ", 값: " << *result << "\nend\n";
             }
             else if (command[0] == "/skilltest1") {
                 assert(command.size() == 2);
                 assert(atoi(command[1].c_str()));
 
-                g_randomSkill.Clear();
+                gRandomSkill.Clear();
                 vecSkill.clear();
 
                 shared_ptr<skill> value;
                 int cnt = atoi(command[1].c_str());
                 for (auto i = 0; i < cnt; ++i) {
-                    value = make_shared<skill>(i+1/*스킬ID*/, ("skill" + to_string(i + 1)).c_str()/*스킬명*/, g_randomSkill.GetRand(1, 99)/*스킬발동계수*/);
+                    value = make_shared<skill>(i+1/*스킬ID*/, ("skill" + to_string(i + 1)).c_str()/*스킬명*/, gRandomSkill.GetRand(1, 99)/*스킬발동계수*/);
                     vecSkill.push_back(value);
                 }
                 for (auto& elem : vecSkill) {
-                    g_randomSkill.AddRandom(elem.get()->getPreb(), elem);
+                    gRandomSkill.AddRandom(elem.get()->getPreb(), elem);
                 }
 
                 vector<pair<int, const shared_ptr<skill>&>> vecEnumSkill;
                 int total = 0;
                 shared_ptr<skill> result;
-                g_randomSkill.Enum(vecEnumSkill);
+                gRandomSkill.Enum(vecEnumSkill);
                 for(auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
                 for(auto& e : vecEnumSkill) {
                     cout << "스킬명: " << e.second.get()->getName() << " ,스킬선택구간: " << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total )%100 << "%\n";
                 }
-                g_randomSkill.GetRandom(result);
+                gRandomSkill.GetRandom(result);
                 cout << "발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/reskilltest1") {
@@ -109,14 +130,14 @@ int main()
                 vector<pair<int, const shared_ptr<skill>&>> vecEnumSkill;
                 int total = 0;
                 shared_ptr<skill> result;
-                g_randomSkill.Enum(vecEnumSkill);
+                gRandomSkill.Enum(vecEnumSkill);
                 for (auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
                 for (auto& e : vecEnumSkill) {
                     cout << "스킬명: " << e.second.get()->getName() << " ,스킬선택구간: " << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
                 }
-                g_randomSkill.GetRandom(result);
+                gRandomSkill.GetRandom(result);
                 cout << "발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/prototype1") {
@@ -172,7 +193,7 @@ int main()
                 for (auto i = 0; i < cnt; ++i) {
                     ItemInfo* pItemInfo = new ItemInfo(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
                     gVecItem.push_back(pItemInfo);
-                    gDropList.AddDropItem(dropID, classType, g_randomTest.GetRand(1, 99), pItemInfo);
+                    gDropList.AddDropItem(dropID, classType, gRandomTest.GetRand(1, 99), pItemInfo);
                 }
                 cout << "end\n";
             }

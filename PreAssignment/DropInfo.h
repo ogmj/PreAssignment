@@ -6,7 +6,7 @@
 
 using namespace std;
 
-extern random<shared_ptr<int>> g_randomTest;
+extern random<shared_ptr<int>> gRandomTest;
 
 template<typename T1, typename T2, typename T3, typename T4>
 class DropInfo {
@@ -58,7 +58,7 @@ public:
 				});
 			if (classType != dropList->second.end()) {
 				if (classID == (*classType).first) {
-					int dropRand = g_randomTest.GetRand(1, (*classType).second.back().first);
+					int dropRand = gRandomTest.GetRand(1, (*classType).second.back().first);
 					cout << "드롭난수: " << dropRand << "\n";
 					auto itemIt = lower_bound((*classType).second.begin(), (*classType).second.end(), dropRand, [](pair<T3, T4*> a, T3 b) {
 						return a.first < b;
