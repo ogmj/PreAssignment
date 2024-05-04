@@ -193,7 +193,7 @@ int main()
                 auto itemtype = static_cast<char>(atoi(command[4].c_str()));
                 //드롭 리스트에 아이템 등록
                 for (auto i = 0; i < cnt; ++i) {
-                    ItemInfo* pItemInfo = new ItemInfo(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
+                    ItemInfo* pItemInfo = ItemInfo::MakeItemInfo(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
                     gVecItem.push_back(pItemInfo);
                     CSingleton<DropInfo<int, char, int, ItemInfo>>::GetInstance()->AddDropItem(dropID, classType, CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRand(1, 99), pItemInfo);
                 }
