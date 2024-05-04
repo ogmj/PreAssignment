@@ -4,7 +4,6 @@
 class CMap: public MemoryPool<CMap> {
 public:
 	CMap() = delete;
-	explicit CMap( int id, char type, int suitable ): mIndex(id), mType(type), mSuitablePlayerCnt(suitable), mPlayerCnt(0) {};
 	virtual ~CMap() = default;
 
 	static CMap* MakeMap(int id, char type, int suitable) {
@@ -37,6 +36,8 @@ public:
 	int GetIndex() {
 		return mIndex;
 	}
+private:
+	explicit CMap(int id, char type, int suitable) : mIndex(id), mType(type), mSuitablePlayerCnt(suitable), mPlayerCnt(0) {};
 
 private:
 	int mIndex;				//유니크 아이디
