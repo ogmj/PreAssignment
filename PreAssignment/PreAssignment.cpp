@@ -26,15 +26,15 @@ void spilt(vector<string>& command, string input) {
 }
 
 static vector<shared_ptr<int>> gVecValue;
-
-static random<shared_ptr<skill>> gRandomSkill;
 static vector<shared_ptr<skill>> vecSkill;
+
 
 static DropInfo<int, char, int, ItemInfo> gDropList;
 static vector<ItemInfo*> gVecItem;
 
 static CMapManager* gMapManager = CSingleton< CMapManager >::GetInstance();
 static random<shared_ptr<int>>* gRandomInt =  CSingleton<random<shared_ptr<int>> >::GetInstance();
+static random<shared_ptr<skill>>* gRandomSkill = CSingleton<random<shared_ptr<skill>> >::GetInstance();
 
 int main()
 {
@@ -99,23 +99,23 @@ int main()
                 assert(command.size() == 2);
                 assert(atoi(command[1].c_str()));
 
-                gRandomSkill.Clear();
+                CSingleton<random<shared_ptr<skill>> >::GetInstance()->Clear();
                 vecSkill.clear();
 
                 shared_ptr<skill> value;
                 int cnt = atoi(command[1].c_str());
                 for (auto i = 0; i < cnt; ++i) {
-                    value = make_shared<skill>(i+1/*스킬ID*/, ("skill" + to_string(i + 1)).c_str()/*스킬명*/, gRandomSkill.GetRand(1, 99)/*스킬발동계수*/);
+                    value = make_shared<skill>(i+1/*스킬ID*/, ("skill" + to_string(i + 1)).c_str()/*스킬명*/, CSingleton<random<shared_ptr<skill>> >::GetInstance()->GetRand(1, 99)/*스킬발동계수*/);
                     vecSkill.push_back(value);
                 }
                 for (auto& elem : vecSkill) {
-                    gRandomSkill.AddRandom(elem.get()->getPreb(), elem);
+                    CSingleton<random<shared_ptr<skill>> >::GetInstance()->AddRandom(elem.get()->getPreb(), elem);
                 }
 
                 vector<pair<int, const shared_ptr<skill>&>> vecEnumSkill;
                 int total = 0;
                 shared_ptr<skill> result;
-                gRandomSkill.Enum(vecEnumSkill);
+                CSingleton<random<shared_ptr<skill>> >::GetInstance()->Enum(vecEnumSkill);
                 for(auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
@@ -124,7 +124,7 @@ int main()
                     cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " << f << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
                     f = e.first;
                 }
-                gRandomSkill.GetRandom(result);
+                CSingleton<random<shared_ptr<skill>> >::GetInstance()->GetRandom(result);
                 cout << ", 발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/reskilltest1") {
@@ -132,7 +132,7 @@ int main()
                 vector<pair<int, const shared_ptr<skill>&>> vecEnumSkill;
                 int total = 0;
                 shared_ptr<skill> result;
-                gRandomSkill.Enum(vecEnumSkill);
+                CSingleton<random<shared_ptr<skill>> >::GetInstance()->Enum(vecEnumSkill);
                 for (auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
@@ -141,7 +141,7 @@ int main()
                     cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " <<  f << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
                     f = e.first;
                 }
-                gRandomSkill.GetRandom(result);
+                CSingleton<random<shared_ptr<skill>> >::GetInstance()->GetRandom(result);
                 cout << ", 발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/prototype1") {
