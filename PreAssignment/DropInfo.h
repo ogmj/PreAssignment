@@ -63,8 +63,10 @@ public:
 						return a.first < b;
 						});
 					cout << "아이템 리스트\n";
+					int f = 1;
 					for (auto& item : (*classType).second) {
-						cout << "아이템명: " << item.second->GetName() << ", 드롭난수구간: " << item.first << ", 클래스: " << item.second->GetClassType() << "\n";
+						cout << "아이템명: " << item.second->GetName() << ", 드롭난수구간: " << f << "-" << item.first << ", 클래스: " << item.second->GetClassType() << "\n";
+						f = item.first;
 					}
 					Data = (*itemIt).second;
 					return true;
@@ -75,7 +77,7 @@ public:
 	}
 
 private:
-	//unordered_map<드롭ID, vector<pair<클래스Type, vector<드롭난수구간,드롭Item >>> > mHsDropList
+	//unordered_map<드롭아이디, vector<pair<클래스타입, vector<드롭난수구간,드롭아이템 >>> > mHsDropList
 	unordered_map<T1, vector<pair<T2, vector<pair<T3, T4*>>>>> mHsDropList;
 	CMutex mLock;
 };
