@@ -183,11 +183,11 @@ int main()
             }
             else if (command[0] == "/test2loaditem") {
 
-                assert(command.size() == 5);
-                assert(atoi(command[1].c_str()));
-                assert(atoi(command[2].c_str()));
-                assert(atoi(command[3].c_str()));
-                assert(atoi(command[4].c_str()));
+                assert(command.size() == 5 && "/test2loaditem command size error");
+                assert(atoi(command[1].c_str()) && "/test2loaditem command cnt error");
+                assert(atoi(command[2].c_str()) && "/test2loaditem command dropID error");
+                assert(atoi(command[3].c_str()) && "/test2loaditem command classType error");
+                assert(atoi(command[4].c_str()) && "/test2loaditem command itemType error");
 
                 auto cnt = atoi(command[1].c_str());
                 auto dropID = atoi(command[2].c_str());
@@ -201,7 +201,7 @@ int main()
                 }
                 cout << "end\n";
             }
-            else if (command[0] == "/test2inititem") {
+            else if (command[0] == "/test2clearitem") {
                 for (auto& item: gVecItem) {
                     delete item;
                 }
@@ -209,9 +209,9 @@ int main()
                 cout << "end\n";
             }
             else if (command[0] == "/test2dropitem") {
-                assert(command.size() == 3);
-                assert(atoi(command[1].c_str()));
-                assert(atoi(command[2].c_str()));
+                assert(command.size() == 3 && "/test2dropitem command size error");
+                assert(atoi(command[1].c_str()) && "/test2dropitem command dropID error");
+                assert(atoi(command[2].c_str()) && "/test2dropitem command classType error");
                 auto dropID = atoi(command[1].c_str());
                 auto classType = static_cast<char>(atoi(command[2].c_str()));
                 ItemInfo* pItemInfo = nullptr;
