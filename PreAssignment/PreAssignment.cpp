@@ -119,11 +119,13 @@ int main()
                 for(auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
+                int f = 1;
                 for(auto& e : vecEnumSkill) {
-                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬선택구간: " << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total )%100 << "%\n";
+                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " << f << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
+                    f = e.first;
                 }
                 gRandomSkill.GetRandom(result);
-                cout << "발동스킬: " << result.get()->getName() << "\nend\n";
+                cout << ", 발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/reskilltest1") {
                 assert(command.size() == 1);
@@ -134,11 +136,13 @@ int main()
                 for (auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
+                int f = 1;
                 for (auto& e : vecEnumSkill) {
-                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬선택구간: " << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
+                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " <<  f << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
+                    f = e.first;
                 }
                 gRandomSkill.GetRandom(result);
-                cout << "발동스킬: " << result.get()->getName() << "\nend\n";
+                cout << ", 발동스킬: " << result.get()->getName() << "\nend\n";
             }
             else if (command[0] == "/prototype1") {
                 assert(command.size() > 1);
