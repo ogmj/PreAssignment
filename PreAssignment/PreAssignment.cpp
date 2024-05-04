@@ -26,7 +26,7 @@ void spilt(vector<string>& command, string input) {
 }
 
 static vector<shared_ptr<int>> gVecValue;
-static vector<shared_ptr<skill>> vecSkill;
+static vector<shared_ptr<skill>> gVecSkill;
 
 
 static DropInfo<int, char, int, ItemInfo> gDropList;
@@ -100,15 +100,15 @@ int main()
                 assert(atoi(command[1].c_str()));
 
                 CSingleton<random<shared_ptr<skill>> >::GetInstance()->Clear();
-                vecSkill.clear();
+                gVecSkill.clear();
 
                 shared_ptr<skill> value;
                 int cnt = atoi(command[1].c_str());
                 for (auto i = 0; i < cnt; ++i) {
                     value = make_shared<skill>(i+1/*스킬ID*/, ("skill" + to_string(i + 1)).c_str()/*스킬명*/, CSingleton<random<shared_ptr<skill>> >::GetInstance()->GetRand(1, 99)/*스킬발동계수*/);
-                    vecSkill.push_back(value);
+                    gVecSkill.push_back(value);
                 }
-                for (auto& elem : vecSkill) {
+                for (auto& elem : gVecSkill) {
                     CSingleton<random<shared_ptr<skill>> >::GetInstance()->AddRandom(elem.get()->getPreb(), elem);
                 }
 
