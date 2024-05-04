@@ -27,14 +27,12 @@ void spilt(vector<string>& command, string input) {
 
 static vector<shared_ptr<int>> gVecValue;
 static vector<shared_ptr<skill>> gVecSkill;
-
-
-static DropInfo<int, char, int, ItemInfo> gDropList;
 static vector<ItemInfo*> gVecItem;
 
 static CMapManager* gMapManager = CSingleton< CMapManager >::GetInstance();
-static random<shared_ptr<int>>* gRandomInt =  CSingleton<random<shared_ptr<int>> >::GetInstance();
-static random<shared_ptr<skill>>* gRandomSkill = CSingleton<random<shared_ptr<skill>> >::GetInstance();
+static random<shared_ptr<int>>* gRandomInt =  CSingleton<random<shared_ptr<int>>>::GetInstance();
+static random<shared_ptr<skill>>* gRandomSkill = CSingleton<random<shared_ptr<skill>>>::GetInstance();
+static DropInfo<int, char, int, ItemInfo>* gDropList = CSingleton<DropInfo<int, char, int, ItemInfo>>::GetInstance();
 
 int main()
 {
@@ -197,7 +195,7 @@ int main()
                 for (auto i = 0; i < cnt; ++i) {
                     ItemInfo* pItemInfo = new ItemInfo(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
                     gVecItem.push_back(pItemInfo);
-                    gDropList.AddDropItem(dropID, classType, CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRand(1, 99), pItemInfo);
+                    CSingleton<DropInfo<int, char, int, ItemInfo>>::GetInstance()->AddDropItem(dropID, classType, CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRand(1, 99), pItemInfo);
                 }
                 cout << "end\n";
             }
@@ -215,7 +213,7 @@ int main()
                 auto dropID = atoi(command[1].c_str());
                 auto classType = static_cast<char>(atoi(command[2].c_str()));
                 ItemInfo* pItemInfo = nullptr;
-                if (gDropList.GetRandomItem(dropID, classType, pItemInfo)) {
+                if (CSingleton<DropInfo<int, char, int, ItemInfo>>::GetInstance()->GetRandomItem(dropID, classType, pItemInfo)) {
                     if (pItemInfo) {
                         cout << "드롭아이템명: " << pItemInfo->GetName() << "\n";
                     }
