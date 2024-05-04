@@ -2,11 +2,10 @@
 #include <vector>
 #include <unordered_map>
 #include "ItemInfo.h"
-#include "../PreAssignment/Util/CMutex.h"
+#include "Util/CMutex.h"
+#include "Util/CSingleton.h"
 
 using namespace std;
-
-extern random<shared_ptr<int>> gRandomTest;
 
 template<typename T1, typename T2, typename T3, typename T4>
 class DropInfo {
@@ -58,7 +57,7 @@ public:
 				});
 			if (classType != dropList->second.end()) {
 				if (classID == (*classType).first) {
-					int dropRand = gRandomTest.GetRand(1, (*classType).second.back().first);
+					int dropRand = CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRand(1, (*classType).second.back().first);
 					cout << "드롭난수: " << dropRand << "\n";
 					auto itemIt = lower_bound((*classType).second.begin(), (*classType).second.end(), dropRand, [](pair<T3, T4*> a, T3 b) {
 						return a.first < b;

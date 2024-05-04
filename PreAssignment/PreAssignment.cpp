@@ -6,7 +6,7 @@
 #include "DropInfo.h"
 //#include "CMap.h"
 #include "CMapManager.h"
-#include "Util/CSingleton.h"
+//#include "Util/CSingleton.h"
 
 using namespace std;
 
@@ -25,7 +25,6 @@ void spilt(vector<string>& command, string input) {
     command.push_back(elem);
 }
 
-static random<shared_ptr<int>> gRandomTest;
 static vector<shared_ptr<int>> gVecValue;
 
 static random<shared_ptr<skill>> gRandomSkill;
@@ -35,6 +34,7 @@ static DropInfo<int, char, int, ItemInfo> gDropList;
 static vector<ItemInfo*> gVecItem;
 
 static CMapManager* gMapManager = CSingleton< CMapManager >::GetInstance();
+static random<shared_ptr<int>>* gRandomInt =  CSingleton<random<shared_ptr<int>> >::GetInstance();
 
 int main()
 {
@@ -56,15 +56,15 @@ int main()
                 shared_ptr<int> value;
                 int cnt = atoi(command[1].c_str());
                 for (auto i = 0; i < cnt; ++i) {
-                    value = make_shared<int>(gRandomTest.GetRand(1,99));
+                    value = make_shared<int>(CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRand(1,99));
                     gVecValue.push_back(value);
                 }
                 for (auto& elem : gVecValue) {
-                    gRandomTest.AddRandom(*elem, elem);
+                    CSingleton<random<shared_ptr<int>> >::GetInstance()->AddRandom(*elem, elem);
                 }
                 shared_ptr<int> result;
                 vector<pair<int, const shared_ptr<int>&>> vecEnum;
-                gRandomTest.Enum(vecEnum);
+                CSingleton<random<shared_ptr<int>> >::GetInstance()->Enum(vecEnum);
                 int total = 0;
                 for (auto e : vecEnum) {
                     total += *e.second.get();
@@ -74,14 +74,14 @@ int main()
                     cout << "난수구간: " << f << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
                     f = (*it).first;
                 }
-                gRandomTest.GetRandom(result);
+                CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRandom(result);
                 cout << ", 값: " << *result << "\nend\n";
             }
             else if (command[0] == "/retest1") {
                 assert(command.size() == 1);
                 shared_ptr<int> result;
                 vector<pair<int, const shared_ptr<int>&>> vecEnum;
-                gRandomTest.Enum(vecEnum);
+                CSingleton<random<shared_ptr<int>> >::GetInstance()->Enum(vecEnum);
                 assert(vecEnum.empty() == false && "/retest1 enum empty.");
                 int total = 0;
                 for (auto e : vecEnum) {
@@ -92,7 +92,7 @@ int main()
                     cout << "난수구간: " << f << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
                     f = (*it).first;
                 }
-                gRandomTest.GetRandom(result);
+                CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRandom(result);
                 cout << ", 값: " << *result << "\nend\n";
             }
             else if (command[0] == "/skilltest1") {
@@ -197,7 +197,7 @@ int main()
                 for (auto i = 0; i < cnt; ++i) {
                     ItemInfo* pItemInfo = new ItemInfo(gVecItem.size()+1, ("item"+to_string(gVecItem.size() + 1)).c_str(), classType, itemtype);
                     gVecItem.push_back(pItemInfo);
-                    gDropList.AddDropItem(dropID, classType, gRandomTest.GetRand(1, 99), pItemInfo);
+                    gDropList.AddDropItem(dropID, classType, CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRand(1, 99), pItemInfo);
                 }
                 cout << "end\n";
             }
