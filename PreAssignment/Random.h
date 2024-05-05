@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+#include "Util/CMutex.h"
 
 using namespace std;
 
@@ -41,6 +42,20 @@ public:
 		return false;
 	}
 
+	bool GetRandom(T1& Data, vector<pair<int, const T1&>>& vecData) {
+		CLOCK(mLock);
+		auto key = GetRand<int>(1, vecData.back().first);
+		cout << "얻은난수: " << key;
+		auto elem = lower_bound(vecData.begin(), vecData.end(), key, [](pair<int, const T1&> a, int b) {
+			return a.first < b;
+			});
+		if (elem != vecData.end()) {
+			Data = elem->second;
+			return true;
+		}
+		return false;
+	}
+
 	template <typename T2>
 	T2 GetRand(T2 begin, T2 end) {
 		std::uniform_int_distribution<T2> r(begin, end);
@@ -61,4 +76,6 @@ public:
 private:
 	std::mt19937_64 mSeed;
 	vector<pair<int, const T1&>> mVecData;
+	CMutex mLock;
+
 };
