@@ -41,16 +41,16 @@
     <ClInclude Include="CMap.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CLock.h">
+    <ClInclude Include="Util\CLock.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
-    <ClInclude Include="CMutex.h">
+    <ClInclude Include="Util\CMemoryPool.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
-    <ClInclude Include="CMemoryPool.h">
+    <ClInclude Include="Util\CMutex.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
-    <ClInclude Include="CSingleton.h">
+    <ClInclude Include="Util\CSingleton.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
   </ItemGroup>
