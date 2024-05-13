@@ -50,7 +50,7 @@ int main()
             else if (command[0] == "/test1") {
                 assert(command.size() == 2 && "/test1 command size error");
                 assert(atoi(command[1].c_str()) && "/test1 command value error");
-                //CSingleton<random<shared_ptr<int>> >::GetInstance()->Clear();
+                CSingleton<random<shared_ptr<int>> >::GetInstance()->Clear();
 
                 shared_ptr<int> value;
                 int cnt = atoi(command[1].c_str());
