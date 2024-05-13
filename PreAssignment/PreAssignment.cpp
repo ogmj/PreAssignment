@@ -50,6 +50,7 @@ int main()
             else if (command[0] == "/test1") {
                 assert(command.size() == 2 && "/test1 command size error");
                 assert(atoi(command[1].c_str()) && "/test1 command value error");
+                //CSingleton<random<shared_ptr<int>> >::GetInstance()->Clear();
 
                 shared_ptr<int> value;
                 int cnt = atoi(command[1].c_str());
@@ -67,9 +68,9 @@ int main()
                 for (auto e : vecEnum) {
                     total += *e.second.get();
                 }
-                int f = 1;
+                int f = 0;
                 for (auto it = vecEnum.begin(); it != vecEnum.end(); ++it) {
-                    cout << "난수구간: " << f << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
+                    cout << "난수구간: " << f + 1 << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
                     f = (*it).first;
                 }
                 CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRandom(result);
@@ -85,9 +86,9 @@ int main()
                 for (auto e : vecEnum) {
                     total += *e.second.get();
                 }
-                int f = 1;
+                int f = 0;
                 for (auto it = vecEnum.begin(); it != vecEnum.end(); ++it) {
-                    cout << "난수구간: " << f << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
+                    cout << "난수구간: " << f + 1 << "-" << (*it).first << ", 값: " << *(*it).second.get() << " ,확율:" << *(*it).second.get() * 100 / total << "." << (*(*it).second.get() * 10000 / total) % 100 << "%\n";
                     f = (*it).first;
                 }
                 CSingleton<random<shared_ptr<int>> >::GetInstance()->GetRandom(result);
@@ -117,9 +118,9 @@ int main()
                 for(auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
-                int f = 1;
+                int f = 0;
                 for(auto& e : vecEnumSkill) {
-                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " << f << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
+                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " << f + 1 << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
                     f = e.first;
                 }
                 CSingleton<random<shared_ptr<skill>> >::GetInstance()->GetRandom(result);
@@ -134,9 +135,9 @@ int main()
                 for (auto& e : vecEnumSkill) {
                     total += e.second.get()->getPreb();
                 }
-                int f = 1;
+                int f = 0;
                 for (auto& e : vecEnumSkill) {
-                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " <<  f << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
+                    cout << "스킬명: " << e.second.get()->getName() << " ,스킬난수구간: " <<  f + 1 << "-" << e.first << " ,발동확율:" << e.second.get()->getPreb() * 100 / total << "." << (e.second.get()->getPreb() * 10000 / total) % 100 << "%\n";
                     f = e.first;
                 }
                 CSingleton<random<shared_ptr<skill>> >::GetInstance()->GetRandom(result);
