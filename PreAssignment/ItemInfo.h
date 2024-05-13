@@ -7,7 +7,7 @@ using namespace std;
 class ItemInfo : public MemoryPool<ItemInfo> {
 public:
 	ItemInfo() = delete;
-	~ItemInfo() = default;
+	virtual ~ItemInfo() = default;
 
 	static ItemInfo* MakeItemInfo(__int64 id, const char* name, char ct, char t) {
 		return new ItemInfo(id, name, ct, t);
